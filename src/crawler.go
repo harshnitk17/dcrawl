@@ -1,4 +1,4 @@
-package crawdad
+package dcrawl
 
 import (
 	"bufio"
@@ -92,7 +92,7 @@ func New() (*Crawler, error) {
 	c := new(Crawler)
 	c.MaxNumberConnections = 20
 	c.MaxNumberWorkers = 8
-	c.RedisURL = "172.31.12.28"
+	c.RedisURL = "127.0.0.1"
 	c.RedisPort = "6379"
 	c.TimeIntervalToPrintStats = 1
 	c.MaximumNumberOfErrors = 20
@@ -110,7 +110,7 @@ func (c *Crawler) Init(config ...Settings) (err error) {
 	// connect to Redis for the settings
 	remoteSettings := redis.NewClient(&redis.Options{
 		Addr:     c.RedisURL + ":" + c.RedisPort,
-		Password: "foobared",
+		Password: "",
 		DB:       4,
 	})
 	_, err = remoteSettings.Ping().Result()
@@ -130,7 +130,7 @@ func (c *Crawler) Init(config ...Settings) (err error) {
 	var val string
 	val, err = remoteSettings.Get("settings").Result()
 	if err != nil {
-		return errors.New(fmt.Sprintf("You need to set the base settings. Use\n\n\tcrawdad -s %s -p %s -set -url http://www.URL.com\n\n", c.RedisURL, c.RedisPort))
+		return errors.New(fmt.Sprintf("You need to set the base settings. Use\n\n\tdcrawl -s %s -p %s -set -url http://www.URL.com\n\n", c.RedisURL, c.RedisPort))
 	}
 	err = json.Unmarshal([]byte(val), &c.Settings)
 	log.Infof("loaded settings: %v", c.Settings)
@@ -169,28 +169,28 @@ func (c *Crawler) Init(config ...Settings) (err error) {
 	// Setup Redis client
 	c.todo = redis.NewClient(&redis.Options{
 		Addr:        c.RedisURL + ":" + c.RedisPort,
-		Password:    "foobared", // no password set
+		Password:    "", // no password set
 		DB:          0,  // use default DB
 		ReadTimeout: 30 * time.Second,
 		MaxRetries:  10,
 	})
 	c.doing = redis.NewClient(&redis.Options{
 		Addr:        c.RedisURL + ":" + c.RedisPort,
-		Password:    "foobared", // no password set
+		Password:    "", // no password set
 		DB:          1,  // use default DB
 		ReadTimeout: 30 * time.Second,
 		MaxRetries:  10,
 	})
 	c.done = redis.NewClient(&redis.Options{
 		Addr:        c.RedisURL + ":" + c.RedisPort,
-		Password:    "foobared", // no password set
+		Password:    "", // no password set
 		DB:          2,  // use default DB
 		ReadTimeout: 30 * time.Second,
 		MaxRetries:  10,
 	})
 	c.trash = redis.NewClient(&redis.Options{
 		Addr:        c.RedisURL + ":" + c.RedisPort,
-		Password:    "foobared", // no password set
+		Password:    "", // no password set
 		DB:          3,  // use default DB
 		ReadTimeout: 30 * time.Second,
 		MaxRetries:  10,

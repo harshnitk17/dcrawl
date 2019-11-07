@@ -1,4 +1,4 @@
-module github.com/schollz/crawdad/v3
+module github.com/harshnitk17/dcrawl/v1
 
 go 1.12
 

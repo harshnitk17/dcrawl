@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	crawdad "github.com/schollz/crawdad/v3/src"
+	dcrawl "github.com/harshnitk17/dcrawl/v1/src"
 	"github.com/urfave/cli"
 )
 
@@ -17,7 +17,7 @@ var version string
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "crawdad"
+	app.Name = "dcrawl"
 	app.Usage = "crawl a site for links"
 	app.Version = version
 	app.Compiled = time.Now()
@@ -90,7 +90,7 @@ func main() {
 		},
 		cli.BoolFlag{
 			Name:  "set",
-			Usage: "set options across crawdads",
+			Usage: "set options across dcrawls",
 		},
 		cli.BoolFlag{
 			Name:  "flush",
@@ -141,22 +141,19 @@ func main() {
 
 	app.Action = func(c *cli.Context) error {
 		// Show start-up stuff
-		fmt.Printf(`
-                      _______
-             \\ //   /   -^--\ |  
-             ||||   / /\_____/ /  
-  {\         ______{ }        /   
-  {_}{\{\{\{|         \=@____/    
- <{_{-{-{-{-| ====---- >>>        
-  { }{/{/{/{|______  _/=@_____    
-  {/               { }        \   
-             ||||  \ \______   \  
-             // \\   \    _^_\ |  
-                      \______/   
+		fmt.Printf(`        ________
+			 |.            *
+			 |...          * 
+			 |.....        *
+			 |.......      *
+			 |.......      *
+			 |.....        *
+			 |...          *
+			 |.            *________
                        
-	crawdad version ` + app.Version + "\n\n")
+	dcrawl version ` + app.Version + "\n\n")
 		// Setup crawler to crawl
-		craw, err := crawdad.New()
+		craw, err := dcrawl.New()
 		if err != nil {
 			return err
 		}
@@ -165,14 +162,14 @@ func main() {
 		craw.MaxNumberWorkers = c.GlobalInt("workers")
 		craw.Info = c.GlobalBool("info")
 		if !c.GlobalBool("debug") {
-			crawdad.SetLogLevel("info")
+			dcrawl.SetLogLevel("info")
 		}
 		craw.TimeIntervalToPrintStats = c.GlobalInt("stats")
 		craw.UserAgent = c.GlobalString("useragent")
 		craw.Cookie = c.GlobalString("cookie")
 
 		// set public options
-		var options crawdad.Settings
+		var options dcrawl.Settings
 		if c.GlobalBool("set") {
 			options.BaseURL = c.GlobalString("url")
 			options.AllowQueryParameters = c.GlobalBool("query")
