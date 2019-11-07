@@ -1,4 +1,4 @@
-module github.com/harshnitk17/dcrawl/v1
+module github.com/harshnitk17/dcrawl
 
 go 1.12
 

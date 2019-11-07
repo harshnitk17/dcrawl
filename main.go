@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	dcrawl "github.com/harshnitk17/dcrawl/v1/src"
+	dcrawl "github.com/harshnitk17/dcrawl"
 	"github.com/urfave/cli"
 )
 
